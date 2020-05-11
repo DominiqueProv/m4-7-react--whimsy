@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import 'focus-visible';
-
+import { format } from 'date-fns'
 import avatar from '../../assets/carmen-sandiego.png';
-
-import Tweet from '../Tweet';
+import Tweet from '../Tweet'
+import { TweetContext } from '../contexts/tweet.context';
 
 const App = () => {
+
   return (
     <Wrapper>
-      <Tweet
-        tweetContents="Where in the world am I?"
-        displayName="Carmen Sandiego ✨"
-        username="carmen-sandiego"
-        avatarSrc={avatar}
-        timestamp={new Date()}
-      />
+        <Tweet
+          tweetContents="Where in the world am I?"
+          displayName="Carmen Sandiego ✨"
+          username="carmen-sandiego"
+          avatarSrc={avatar}
+          timestamp={format(new Date(), 'p • PP')}
+        />
     </Wrapper>
   );
 };

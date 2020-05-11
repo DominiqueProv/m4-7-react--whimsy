@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
 import LikeButton from '../LikeButton';
-
 import Action from './Action';
 import TweetActionIcon from './TweetActionIcon';
+import {TweetContext} from '../contexts/tweet.context';
 
 const propTypes = {
   displayName: PropTypes.string.isRequired,
@@ -14,19 +13,22 @@ const propTypes = {
   tweetContents: PropTypes.string.isRequired,
 };
 
+
 const Tweet = ({
   displayName,
   username,
   avatarSrc,
   tweetContents,
   timestamp,
-  numOfRetweets,
-  numOfLikes,
   isLikedByCurrentUser,
   isRetweetedByCurrentUser,
-  handleToggleLike,
-  handleToggleRetweet,
 }) => {
+
+  const {
+    actions: { toggleLike, toggleRetweet },
+    state,
+  } = React.useContext(TweetContext);
+
   return (
     <Wrapper>
       <Header>
@@ -38,9 +40,14 @@ const Tweet = ({
       </Header>
 
       <TweetContents>{tweetContents}</TweetContents>
-
+      <Timestamp>{timestamp}</Timestamp>
       <Divider />
-
+      <Stats>
+        <div style={{paddingRight: "30px"}}><span>{state.numOfRetweets}</span> Retweets</div>
+        <div><span>{state.numOfLikes} </span>Likes</div>
+      </Stats>
+      <Divider />
+      
       <Actions>
         <Action
           color="rgb(27, 149, 224)"
@@ -55,7 +62,7 @@ const Tweet = ({
         <Action
           color="rgb(23, 191, 99)"
           size={40}
-          onClick={handleToggleRetweet}
+          onClick={toggleRetweet}
         >
           <TweetActionIcon
             kind="retweet"
@@ -63,7 +70,7 @@ const Tweet = ({
           />
         </Action>
 
-        <Action color="rgb(224, 36, 94)" size={40} onClick={handleToggleLike}>
+        <Action color="rgb(224, 36, 94)" size={40} onClick={toggleLike}>
           <LikeButton isLiked={isLikedByCurrentUser} />
         </Action>
 
@@ -143,6 +150,9 @@ const Stats = styled.div`
   display: flex;
   align-items: center;
   height: 48px;
+    span{
+      font-weight: bolder;
+    }
 `;
 
 const Actions = styled.div`
